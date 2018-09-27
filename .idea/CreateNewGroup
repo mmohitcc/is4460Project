@@ -1,0 +1,32 @@
+<!Doctype HTML>
+	<HTML>
+		<HEAD>
+			<BODY>
+				<h1 align="center">
+				Add Group
+				</h1>
+					<div>
+						<p>
+							<font size="4"> Fill out the form to create your study session group.<br>
+							<form action="CreateNewGroup.html">
+								<font size="4">Group Name: <br>
+								<input type="text" name="Group Name"><br>
+									University: <br>
+									<input type="text" name="Class Name"><br>
+									Class Name: <br>
+								 <input type="text" name="Class Name"><br>
+									Class Number: <br>
+									<input type="text" name="Class Number"><br>
+									<br>
+									<input type="submit" name="submit">
+							</form>
+						</p>
+					</div>
+					<div>
+						<p>
+							<a href="ACCOUNTCREATIONURL">Not a user? Create a free account!</a>
+						</p>
+					</div>
+			</BODY>
+		</HEAD>
+	</HTML>
