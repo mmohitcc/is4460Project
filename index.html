@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script>
+
+        function test() {
+            $('.headLink').css('color', 'red');
+            alert('hey');
+        }
+
+    </script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="row">
+    <div class="col-md-3">
+        <img style="padding: 10px;" src="images/logo.png" alt="logo">
+    </div>
+
+    <div class="col-md-9 nav_header">
+        <span>
+            <span class="headLink">Find a Group</span>
+                <span onmouseover="test()" class="headLink">Find a tutor</span>
+                <span class="headLink">Register</span>
+                <span class="headLink">Login</span>
+        </span>
+    </div>
+</div>
+
+<div align="center" style="padding-top: 25px;">
+    <h2 style="color: aliceblue;">Search 1000's of Local Tutors to get Help Today</h2>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <img height="80px" width="80px" src="images/location.png" alt="location" style="margin-left: 320px; margin-top: 13px">
+    </div>
+    <div class="col-md-9">
+        <span class="landingSearch">
+             <form>
+        <div style="padding-top: 15px; margin-left: 80px;">
+            <input height="100%" style="color: darkgray; float: left; padding: 20px; border: none; font-size: 30px;" type="number" placeholder="Zip Code">
+            <button style="padding: 20px; border: none; font-size: 30px; color: darkgray;" type="submit"> Search </button>
+        </div>
+    </form>
+        </span>
+    </div>
+
+</div>
+
+
+<!--<img height="80px" width="80px" src="images/location.png" alt="location" style="margin-left: 200px;">-->
+<!--<div class="landingSearch">-->
+    <!--<form>-->
+        <!--<div style="padding-top: 15px;">-->
+            <!--<input height="100%" style="float: left; padding-left: 20px; border: none; font-size: 30px;" type="number" placeholder="Zip Code">-->
+            <!--<button style="float: right; padding-right: 20px; border: none; font-size: 30px;" type="submit"> Search </button>-->
+        <!--</div>-->
+    <!--</form>-->
+
+<!--</div>-->
+
+</body>
+</html>
