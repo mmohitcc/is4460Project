@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>
+			Modify Group
+		</title>
+	</head>
+		<h1>
+			Update Group
+		</h1>
+	<body>
+		<p>
+			<div>Fill out the following form to modify your Study Sessions group.</div>
+			<div>
+				<!--action = current page for refresh since we do not have a back-end-->
+				<form action="ModifyGroup.html">
+					<br>
+					Group Number:<br>
+					<input type = "text" name = "Group Number"><br>
+					Group Name:<br>
+					<input type = "text" name = "Group Name"><br>
+					Update:<br>
+					<input type ="text" name "Update"><br>
+					<br>
+					Do you approve of this update?:<br>
+					<input type="checkbox" name="Confirm" value ="Confirm" checked> Confirmed<br>
+					<br>
+					<input type ="submit" value="submit">
+				</form>
+			</div>
+		</p>
+	</body>
+</html>
