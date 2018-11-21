@@ -11,7 +11,7 @@
 <body>
 <!-- Image and text -->
 <nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" href="home.html">
+    <a class="navbar-brand" href="home.php">
         <img src="images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
         Study Sessions
     </a>
@@ -23,19 +23,34 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
-                <a class="nav-link" href="home.html">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <?php
+            session_start();
+
+            if (isset($_SESSION['FullName'])) {
+                echo $_SESSION['FullName'];
+                echo '<li class="nav-item">
+                <a class="nav-link" href="logout.php">logout</a>
+                </li>';
+            }
+            else
+            {
+                echo '<li class="nav-item">
+                <a class="nav-link" href="login.php">Login</a>
+                </li>';
+
+            }
+
+            ?>
+            <li class="nav-item">
+                <a class="nav-link" href="studyGroups.php">Study Groups</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="login.html">Login/Signup</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="studyGroups.html">Study Groups</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="tutors.html">Tutors</a>
+                <a class="nav-link" href="tutors.php">Tutors</a>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0" action="studyGroups.html">
+        <form class="form-inline my-2 my-lg-0" action="studyGroups.php">
             <input class="form-control mr-sm-2" type="number" placeholder="zip">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
@@ -52,7 +67,7 @@
             <div class="card card-signin my-5">
                 <div class="card-body">
                     <h5 class="card-title text-center">Edit Study Group</h5>
-                    <form class="form-signin" id="editStudyGroup" action="studyGroups.html">
+                    <form class="form-signin" id="editStudyGroup" action="studyGroups.php">
 
                         <div class="form-label-group">
                             <input type="Text" id="name" class="form-control" placeholder="Class" value="Is 4460" required>
@@ -91,7 +106,7 @@
                         <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Update Group</button>
                         <hr class="my-4">
                     </form>
-                    <a href="studyGroups.html"><button style="margin-top: 5px;" class="btn btn-lg btn-danger btn-block text-uppercase" type="submit">Delete Group</button></a>
+                    <a href="studyGroups.php"><button style="margin-top: 5px;" class="btn btn-lg btn-danger btn-block text-uppercase" type="submit">Delete Group</button></a>
                 </div>
             </div>
         </div>

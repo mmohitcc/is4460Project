@@ -22,23 +22,53 @@
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+
+            <?php
+            session_start();
+                if (isset($_SESSION['FullName'])) {
+                    echo $_SESSION['FullName'];
+                    echo '<li class="nav-item">
+                <a class="nav-link" href="logout.php">logout</a>
+                </li>';
+                }
+                else
+                {
+                    echo '<li class="nav-item">
+                <a class="nav-link" href="login.php">Login</a>
+                </li>';
+
+                }
+            ?>
+
+            <?php
+            session_start();
+            if (isset($_SESSION['FullName'])) {
+                echo '<li class="nav-item">
+                <a class="nav-link" href="dashboard.php">Dashboard</a>
+                </li>';
+            }
+            else
+            {
+                echo '<li class="nav-item">
+                <a class="nav-link" href="home.php">Home</a>
+                </li>';
+
+            }
+            ?>
+
+
+            <li class="nav-item">
+                <a class="nav-link" href="home.php">Study Groups</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="login.html">Login</a>
+                <a class="nav-link" href="tutors.php">Tutors</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="studyGroups.html">Study Groups</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="tutors.html">Tutors</a>
-            </li>
+
         </ul>
-        <form class="form-inline my-2 my-lg-0" action="studyGroups.html">
-            <input class="form-control mr-sm-2" type="number" placeholder="zip">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+<!--        <form class="form-inline my-2 my-lg-0" action="studyGroups.php">-->
+<!--            <input class="form-control mr-sm-2" type="number" placeholder="zip">-->
+<!--            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
+<!--        </form>-->
     </div>
 </nav>
 
@@ -51,10 +81,10 @@
             <div class="text-center">
                 <h1>Study Sessions</h1><p>find a local study group today</p>
             </div>
-            <form role="form" action="studyGroups.html" id="form-buscar">
+            <form role="form" method="post" action="studyGroups.php" id="form-buscar">
                 <div class="form-group">
                     <div class="input-group">
-                        <input id="1" class="form-control" type="number" name="search" placeholder="Zipcode..." required/>
+                        <input id="1" class="form-control" type="number" name="searchZip" placeholder="Zipcode..." required/>
                         <span class="input-group-btn">
 <button class="btn btn-success" type="submit">
 <i class="glyphicon glyphicon-search" aria-hidden="true"></i> Search

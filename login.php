@@ -1,3 +1,7 @@
+<?php
+
+require_once 'Loginprocess.php';
+?>
 
 <!DOCTYPE html>
 <html>
@@ -11,7 +15,7 @@
 <body>
 <!-- Image and text -->
 <nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" href="home.html">
+    <a class="navbar-brand" href="home.php">
         <img src="images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
         Study Sessions
     </a>
@@ -23,19 +27,36 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
-                <a class="nav-link" href="home.html">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="login.html">Login/Signup</a>
+            <?php
+            session_start();
+
+            if (isset($_SESSION['FullName'])) {
+                echo $_SESSION['FullName'];
+                echo '<li class="nav-item">
+                <a class="nav-link" href="logout.php">logout</a>
+                </li>';
+            }
+            else
+            {
+                echo '<li class="nav-item">
+                <a class="nav-link" href="login.php">Login</a>
+                </li>';
+
+            }
+
+
+
+            ?>
+            <li class="nav-item">
+                <a class="nav-link" href="studyGroups.php">Study Groups</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="studyGroups.html">Study Groups</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="tutors.html">Tutors</a>
+                <a class="nav-link" href="tutors.php">Tutors</a>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0" action="studyGroups.html">
+        <form class="form-inline my-2 my-lg-0" action="studyGroups.php">
             <input class="form-control mr-sm-2" type="number" placeholder="zip">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
@@ -51,56 +72,34 @@
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div class="card card-signin my-5">
                 <div class="card-body">
-                    <h5 class="card-title text-center">Sign Up</h5>
-                    <form class="form-signin">
-
+                    <h5 class="card-title text-center">Sign In</h5>
+                    <form class="form-signin" method="POST" action="Loginprocess.php">
                         <div class="form-label-group">
-                            <input type="Text" id="name" class="form-control" placeholder="Name (first last)" required>
-                            <label for="name">Name</label>
-                        </div>
-
-                        <div class="form-label-group">
-                            <input type="number" id="phone" class="form-control" placeholder="Phone" required>
-                            <label for="inputPassword">Phone</label>
-                        </div>
-
-                        <div class="form-label-group">
-                            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                            <input type="email" name="Email" id="inputEmail" class="form-control" placeholder="Email address">
                             <label for="inputEmail">Email address</label>
                         </div>
 
                         <div class="form-label-group">
-                            <input type="email" id="inputConfirmEmail" class="form-control" placeholder="Confirm Email address" required autofocus>
-                            <label for="inputConfirmEmail">Confirm Email address</label>
-                        </div>
-
-                        <div class="form-label-group">
-                            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                            <input type="password" name="pwd" id="inputPassword" class="form-control" placeholder="Password">
                             <label for="inputPassword">Password</label>
-                        </div>
-
-                        <div class="form-label-group">
-                            <input type="password" id="inputConfirmPassword" class="form-control" placeholder="Confirm Password" required>
-                            <label for="inputConfirmPassword">Confirm Password</label>
                         </div>
 
                         <div class="custom-control custom-checkbox mb-3">
                             <input type="checkbox" class="custom-control-input" id="customCheck1">
                             <label class="custom-control-label" for="customCheck1">Remember password</label>
                         </div>
-                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Create Account</button>
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
                         <hr class="my-4">
-                    </form>
-                    <div style="text-align: center"><p>have an account?</p></div>
-                    <a href="login.html"><button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i>Sign In</button></a>
+                        </form>
+                    <div style="text-align: center"><p>need an account?</p></div>
+                    <a href="signup.php"><button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign Up</button></a>
+                    
                 </div>
             </div>
         </div>
     </div>
 </div>
 </body>
-
-
 
 <!--footer-->
 <div class="footer">
