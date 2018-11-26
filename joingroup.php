@@ -4,6 +4,12 @@ require_once 'setLogin.php';
 $conn = new mysqli($hn, $un, $pw, $db);
 if($conn->connect_error) die($conn->connect_error);
 
+session_start();
+
+if (!isset($_SESSION['userID'])) {
+    header("Location: login.php");
+}
+
 if(isset($_POST['joinGroupId'])){
     $groupId =$_POST['joinGroupId'];
     session_start();

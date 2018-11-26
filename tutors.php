@@ -12,7 +12,7 @@
 <body>
 <!-- Image and text -->
 <nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" href="home.php">
+    <a class="navbar-brand" href="#">
         <img src="images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
         Study Sessions
     </a>
@@ -23,16 +23,16 @@
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item">
-                <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
-            </li>
+
             <?php
             session_start();
-
             if (isset($_SESSION['FullName'])) {
                 echo $_SESSION['FullName'];
                 echo '<li class="nav-item">
                 <a class="nav-link" href="logout.php">logout</a>
+                </li>
+                                <li class="nav-item">
+                <a class="nav-link" href="editUser.php">edit profile</a>
                 </li>';
             }
             else
@@ -42,19 +42,35 @@
                 </li>';
 
             }
-
-
-
             ?>
+
+            <?php
+            session_start();
+            if (isset($_SESSION['FullName'])) {
+                echo '<li class="nav-item">
+                <a class="nav-link" href="dashboard.php">Home</a>
+                </li>';
+            }
+            else
+            {
+                echo '<li class="nav-item">
+                <a class="nav-link" href="home.php">Home</a>
+                </li>';
+
+            }
+            ?>
+
+
             <li class="nav-item">
-                <a class="nav-link" href="studyGroups.php">Study Groups</a>
+                <a class="nav-link" href="home.php">Study Groups</a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Tutors</a>
+            <li class="nav-item">
+                <a class="nav-link" href="tutors.php">Tutors</a>
             </li>
+
         </ul>
-        <form class="form-inline my-2 my-lg-0" action="studyGroups.php">
-            <input class="form-control mr-sm-2" type="number" placeholder="zip">
+        <form class="form-inline my-2 my-lg-0" method="post" action="studyGroups.php">
+            <input class="form-control mr-sm-2" name="searchZip" type="number" placeholder="zip">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
     </div>
@@ -82,7 +98,14 @@
 
 
     session_start();
+
+    if (!isset($_SESSION['userID'])) {
+        header("Location: login.php");
+    }
+
     $user_id =  $_SESSION['userID'];
+
+
 
     $query = "SELECT * FROM users where UserType = 'tutor';";
 
@@ -128,9 +151,14 @@
                                     <form class='form-signin' method='post' action='contactTutor.php'>
 
                                         <div class='form-label-group'>
-                                            <label for='Title'>Date</label>
+                                            <label for='date'>Date</label>
                                             <input type='date' id='date' name='date' class='form-control' placeholder='date' required>
                                         </div>
+                                        
+                                        <div class='form-label-group'>
+                                            <label for='timeStart'>Time Start</label>
+                                            <input type='text' id='timeStart' name='timeStart' class='form-control' required autofocus>
+                                        </div>     
 
                                         <div class='form-label-group'>
                                             <label for='length'>Session Length</label>
@@ -139,7 +167,7 @@
                                          
                                          
                                          <div class='form-label-group'>
-                                            <label for='message'>Address</label>
+                                            <label for='address'>Address</label>
                                             <input type='text' id='address' name='address' class='form-control' required autofocus>
                                         </div>
                                         
@@ -153,7 +181,7 @@
                                             <input type='text' id='comment' name='comment' class='form-control' required autofocus>
                                         </div>                                       
                                         
-                                        <input type='hidden' name='studyGroupId' value='$row->id' >
+                                        <input type='hidden' name='tutorId' value='$row->id' >
                                         <br>
                                         <br>
                                         <button class='btn btn-lg btn-primary btn-block text-uppercase' type='submit'>Create</button>

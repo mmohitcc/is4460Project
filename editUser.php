@@ -1,5 +1,92 @@
 <?php
-require_once 'signupprocess.php';
+
+session_start();
+$user_id =  $_SESSION['userID'];
+$nameOld = $_SESSION['FullName'];
+$phoneOld = $_SESSION['Phone'];
+$emailOld = $_SESSION['Email'];
+$tokenOld = $_SESSION['Token'];
+$schoolOld = $_SESSION['School'];
+$majorOld = $_SESSION['Major'];
+$zipOld = $_SESSION['Zip'];
+$addressOld = $_SESSION['Address'];
+$userTypeOld = $_SESSION['UserType'];
+$payRateOld = $_SESSION['PayRate'];
+$imgOld = $_SESSION['imgUrl'];
+
+if (isset($_POST['editUser'])) {
+    $FullName = $_POST['FullName'];
+    $Phone = $_POST['Phone'];
+    $Email = $_POST['Email'];
+    $School = $_POST['School'];
+    $Major = $_POST['Major'];
+    $Zip = $_POST['Zip'];
+    $Address = $_POST['Address'];
+    $UserType = $_POST['UserType'];
+    $PayRate = $_POST['PayRate'];
+    $pwd = $_POST['pwd'];
+
+    $salt1 = 'qm&h*';
+    $salt2 = 'pg!@';
+    //$pwd = sanitizeMySQL($conn, $_POST['pwd']);
+    $Token = hash('ripemd128', "$salt1$pwd$salt2");
+
+
+    if($nameOld != $FullName){
+        $nameOld = $FullName;
+    }
+
+    if($phoneOld != $Phone){
+        $phoneOld = $Phone;
+    }
+
+    if($emailOld != $Email){
+        $emailOld = $Email;
+    }
+
+    if($tokenOld != $Token){
+        $tokenOld = $Token;
+    }
+
+    if($schoolOld != $School){
+        $schoolOld = $School;
+    }
+
+    if($majorOld != $Major){
+        $majorOld = $Major;
+    }
+
+    if($zipOld != $Zip){
+        $zipOld = $Zip;
+    }
+
+    if($addressOld != $Address){
+        $addressOld = $Address;
+    }
+
+    if($payRateOld != $PayRate){
+        $payRateOld = $PayRate;
+    }
+
+    $query = "UPDATE users
+SET FullName = '$nameOld', Phone = '$phoneOld',
+    Email = '$emailOld', Token = '$tokenOld',
+    School = '$schoolOld', Major = '$majorOld',
+    zipa = '$zipOld', Address = '$addressOld',
+    PayRate = '$payRateOld'
+WHERE id = $user_id;";
+
+    $result = $conn->query($query);
+    if(!$result) die($conn->error);
+
+    // update session with the new data
+
+
+
+}
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -91,7 +178,6 @@ require_once 'signupprocess.php';
     </div>
 </nav>
 
-
 <!--body-->
 
 <body>
@@ -100,36 +186,42 @@ require_once 'signupprocess.php';
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div class="card card-signin my-5">
                 <div class="card-body">
-                    <h5 class="card-title text-center">Sign Up</h5>
-                    <form class="form-signin" method="Post" action="signup.php">
+                    <h5 class="card-title text-center">update user</h5>
+                    <form class="form-signin" method="Post" action="testEditUser.php">
 
                         <div class="form-label-group">
-                            <input type="Text" name="FullName" id="name" class="form-control" placeholder="Name (first last)" required>
+                            <input value="<?php echo $imgOld ?>" type="Text" name="imgUrl" id="imgUrl" class="form-control" placeholder="Image URL" required>
+                            <label for="imgUrl">Name</label>
+                        </div>
+
+
+                        <div class="form-label-group">
+                            <input value="<?php echo $nameOld ?>" type="Text" name="FullName" id="name" class="form-control" placeholder="Name (first last)" required>
                             <label for="name">Name</label>
                         </div>
 
                         <div class="form-label-group">
-                            <input type="number" name="Phone" id="phone" class="form-control" placeholder="Phone" required>
+                            <input value="<?php echo $phoneOld ?>" type="number" name="Phone" id="phone" class="form-control" placeholder="Phone" required>
                             <label for="inputPassword">Phone</label>
                         </div>
 
                         <div class="form-label-group">
-                            <input type="email" name="Email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                            <input value="<?php echo $emailOld ?>" type="email" name="Email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
                             <label for="inputEmail">Email address</label>
                         </div>
 
                         <div class="form-label-group">
-                            <input type="email" id="inputConfirmEmail" class="form-control" placeholder="Confirm Email address" required autofocus>
+                            <input value="<?php echo $emailOld ?>" type="email" id="inputConfirmEmail" class="form-control" placeholder="Confirm Email address" required autofocus>
                             <label for="inputConfirmEmail">Confirm Email address</label>
                         </div>
 
                         <div class="form-label-group">
-                            <input type="password" name="pwd" id="inputPassword" class="form-control" placeholder="Password" required>
+                            <input type="password" name="pwd" id="inputPassword" class="form-control" placeholder="Password" >
                             <label for="inputPassword">Password</label>
                         </div>
 
                         <div class="form-label-group">
-                            <input type="password" id="inputConfirmPassword" class="form-control" placeholder="Confirm Password" required>
+                            <input type="password" id="inputConfirmPassword" class="form-control" placeholder="Confirm Password" >
                             <label for="inputConfirmPassword">Confirm Password</label>
                         </div>
 
@@ -152,7 +244,11 @@ require_once 'signupprocess.php';
 
                                 $row_count = $result->num_rows;
                                 while ($row = mysqli_fetch_object($result)) {
-                                    echo "<option value='$row->name'> $row->name </option>";
+                                    if ($schoolOld == $row->name) {
+                                        echo "<option selected='selected' value='$row->name'> $row->name </option>";
+                                    } else {
+                                        echo "<option value='$row->name'> $row->name </option>";
+                                    }
                                 }
 
                                 ?>
@@ -162,44 +258,52 @@ require_once 'signupprocess.php';
                         </div>
 
                         <div class="form-label-group">
-                            <input type="text" name="Major" id="inputMajor" class="form-control" placeholder="Major" required>
+                            <input value="<?php echo $majorOld ?>" type="text" name="Major" id="inputMajor" class="form-control" placeholder="Major" required>
                             <label for="inputMajor">Major</label>
                         </div>
 
                         <div class="form-label-group">
-                            <input type="text" name="Zip" id="inputZip" class="form-control" placeholder="ZIP Code" required>
+                            <input value="<?php echo $zipOld ?>" type="text" name="Zip" id="inputZip" class="form-control" placeholder="ZIP Code" required>
                             <label for="inputZip">ZIP Code</label>
                         </div>
 
                         <div class="form-label-group">
-                            <input type="text" name="Address" id="inputAddress" class="form-control" placeholder="Address" required>
+                            <input value="<?php echo $addressOld ?>" type="text" name="Address" id="inputAddress" class="form-control" placeholder="Address" required>
                             <label for="inputAddress">Address</label>
                         </div>
 
-                        <div class="form-label-group" >
+<!--                        <div class="form-label-group" >-->
+<!---->
+<!--                            <select onchange="test()" id="inputUserType" class="form-control" name ="UserType" >-->
+<!--                                <option value="student"> Student </option>-->
+<!--                                <option value="tutor"> Tutor </option>-->
+<!--                            </select>-->
+<!--                            <label for="inputUserType">Student or Tutor</label>-->
+<!--                        </div>-->
 
-                            <select onchange="test()" id="inputUserType" class="form-control" name ="UserType" >
-                                <option value="student"> Student </option>
-                                <option value="tutor"> Tutor </option>
-                            </select>
-                            <label for="inputUserType">Student or Tutor</label>
-                        </div>
 
-                        <div class="form-label-group">
-                            <input style="display: none" value="0" type="text" name="PayRate" id="inputPayRate" class="form-control" placeholder="Pay Rate" required>
-                            <label style="display: none" id="inputPayRateLabel" for="inputPayRate">For Tutors Only: Pay Rate</label>
-                        </div>
+                        <?php
 
-                        <div class="custom-control custom-checkbox mb-3">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">Remember password</label>
-                        </div>
+                        session_start();
+                        $type =  $_SESSION['UserType'];
+                        $pay = $_SESSION['PayRate'];
+
+                        if($type == "tutor") {
+                            echo "<div class=\"form-label-group\">
+                                <input value='$payRateOld' value=\"0\" type=\"text\" name=\"PayRate\" id=\"inputPayRate\" class=\"form-control\" placeholder=\"Pay Rate\" required>
+                                <label id=\"inputPayRateLabel\" for=\"inputPayRate\">For Tutors Only: Pay Rate</label>
+                                </div>";
+
+                        }
+
+                        ?>
+
+                        <input type="hidden" name="editUser" value="edit">
+
                         <!--Changed button to input-->
-                        <input class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" value="Create Account">
+                        <input class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" value="Update Account">
                         <hr class="my-4">
                     </form>
-                    <div style="text-align: center"><p>have an account?</p></div>
-                    <a href="login.php"><button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i>Sign In</button></a>
                 </div>
             </div>
         </div>
@@ -232,7 +336,7 @@ require_once 'signupprocess.php';
                                             <label for="university">University</label>
                                             <input type="text" id="university" name="university" class="form-control" required autofocus>
                                         </div>
-                                            <input type="hidden" name="from" value="signup">
+                                        <input type="hidden" name="from" value="signup">
                                         <br>
                                         <br>
                                         <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Add</button>

@@ -3,13 +3,6 @@ require_once 'setLogin.php';
 $conn = new mysqli($hn, $un, $pw, $db);
 if($conn->connect_error) die($conn->connect_error);
 
-session_start();
-
-if (!isset($_SESSION['userID'])) {
-    header("Location: login.php");
-
-}
-
 
 
 ?>
@@ -96,55 +89,28 @@ if (!isset($_SESSION['userID'])) {
 
 
 <!-- Button to Open the Modal -->
-<button style="margin: 50px; margin-left: 20%;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-    Create Message
-</button>
+<?php
 
+session_start();
 
+$type =  $_SESSION['UserType'];
 
+ if($type == 'admin') {
+     echo "
+<button style=\"margin: 50px; margin-left: 20%;\" type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#myModal\">
+    Create Announcement
+</button>";
+ } else {
 
+     echo "<br><br>";
 
+ }
 
-
-
-
+?>
 
 <?php
 
-if(isset($_POST['messageId'])) {
-
-
-    $title2 = $_POST['title'];
-    $content2 = $_POST['message'];
-    $messageId = $_POST['messageId'];
-
-    $query = "INSERT INTO `replies` (`title`, `content`, `messageId`) 
-    VALUES ('$title2', '$content2', '$messageId');";
-
-    $result = $conn->query($query);
-    if (!$result) die($conn->error);
-
-}
-
-
-if(isset($_POST['titleMessage'])) {
-
-
-    $title = $_POST['titleMessage'];
-    $content = $_POST['message'];
-    $studySessionId = $_POST['studyGroupId'];
-
-    $query = "INSERT INTO `messages` (`title`, `content`, `studySessionId`) 
-    VALUES ('$title', '$content', '$studySessionId');";
-
-    $result = $conn->query($query);
-    if (!$result) die($conn->error);
-
-}
-
-if(isset($_POST['studyGroupId'])){
-    $id =$_POST['studyGroupId'];
-    $query = "SELECT * from messages where studySessionId = $id;";
+    $query = "SELECT * from announcements;";
 
     $result = $conn->query($query);
     if(!$result) die($conn->error);
@@ -163,88 +129,27 @@ if(isset($_POST['studyGroupId'])){
 
         echo "    
      <div style='width: 60%' class='studyCard'>
-        <h3>$row->title </h3>
-        <p>$row->content </p>
-        <button style='margin: 50px;' type='button' class='btn btn-primary' data-toggle='modal' data-target='#myModal$row->messageId'>
-            reply
-        </button>
-          <button class=\"btn btn-primary\" type=\"button\" data-toggle=\"collapse\" data-target='#collapse$row->messageId' aria-expanded=\"false\" aria-controls='collapse$row->messageId'>
-    Show Replies
-  </button> 
-        <div class='modal' id='myModal$row->messageId'>
-    <div class='modal-dialog'>
-        <div style='width: 600px' class='modal-content'>
-
-            <!-- Modal Header -->
-            <div class='modal-header'>
-                    <h4 style=\"margin-left: 33%\" class=\"modal-title\">Reply Message</h4>
-                <button type='button' class='close' data-dismiss='modal'>&times;</button>
-            </div>
-            <!-- Modal body -->
-            <div class='modal-body'>
-                <body>
-                <div style='margin-left: -10px'>
-                    <div class='row'>
-                        <div class='col-sm-9 col-md-7 col-lg-5 mx-auto'>
-                            <div style=\"width: 400px; margin-left: -40%\">
-                                <div>
-                                    
-                                    <form class='form-signin' method='post' action='messagesShow.php'>
-
-                                        <div class='form-label-group'>
-                                            <label for='Title'>Title</label>
-                                            <input type='text' id='title' name='title' class='form-control' placeholder='title' required>
-                                        </div>
-
-                                        <div class='form-label-group'>
-                                            <label for='message'>Message</label>
-                                            <input type='text' id='message' name='message' class='form-control' required autofocus>
-                                        </div>
-
-                                        <input type='hidden' name='messageId' value='$row->messageId' >
-                                        <input type='hidden' name='studyGroupId' value='$id' >
-
-                                        <br>
-                                        <br>
-                                        <button class='btn btn-lg btn-primary btn-block text-uppercase' type='submit'>Create</button>
-                                        <hr class='my-4'>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal footer -->
-            <div class='modal-footer'>
-                <button type='button' class='btn btn-danger' data-dismiss='modal'>Close</button>
-            </div>
-
+        <h3>$row->header </h3>
+        <p>$row->announcement </p>
+        <div>
+        <span style='margin: 10px'>
+         <form method='post' action='likeDislike.php'>
+         <input type='hidden' name='announcementId' value='$row->id'>
+         <input type='hidden' name='like' value='$row->likes'>
+         <button style='border: none; background: transparent;'><i style='color: green' class='fa fa-thumbs-up'></i> $row->likes</button>
+         </form>
+         </span>
+        <span style='margin: 10px'>
+         <form method='post' action='likeDislike.php'>
+         <input type='hidden' name='announcementId' value='$row->id'>
+         <input type='hidden' name='dislike' value='$row->disLikes'>
+         <button style='border: none; background: transparent;'><i style='color: red' class='fa fa-thumbs-down'></i> $row->disLikes</button>
+         </form>
+         </span>
         </div>
-    </div>
+          
 </div>";
 
-
-        echo "<div class=\"collapse\" id='collapse$row->messageId'>
-        <div align='center'>
-        ";
-        while ($row2 = mysqli_fetch_object($result2)) {
-            echo "
-              
-             $row2->content <br>
-             <hr style='width: 80%'>
-
-              ";
-
-
-
-
-        }
-
-        echo "    
-              </div>
-              </div> <br></div>";
 
 
     }
@@ -254,7 +159,7 @@ if(isset($_POST['studyGroupId'])){
 
     $result= $conn->query($query);
 
-}
+
 ?>
 
 
@@ -287,7 +192,7 @@ if(isset($_POST['studyGroupId'])){
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 style="margin-left: 33%" class="modal-title">Create Message</h4>
+                <h4 style="margin-left: 33%" class="modal-title">Create Announcement</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <!-- Modal body -->
@@ -298,19 +203,17 @@ if(isset($_POST['studyGroupId'])){
                         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
                             <div style="width: 400px; margin-left: -40%">
                                 <div>
-                                    <form class="form-signin" method="post" action="messagesShow.php">
+                                    <form class="form-signin" method="post" action="addAdminAnnouncement.php">
 
                                         <div class="form-label-group">
-                                            <label for="Title">Title</label>
-                                            <input type="text" id="title" name="titleMessage" class="form-control" placeholder="title" required>
+                                            <label for="header">Header</label>
+                                            <input type="text" id="header" name="header" class="form-control" placeholder="header" required>
                                         </div>
 
                                         <div class="form-label-group">
-                                            <label for="message">Message</label>
-                                            <input type="text" id="message" name="message" class="form-control" required autofocus>
+                                            <label for="message">Announcement</label>
+                                            <input type="text" id="announcement" name="announcement" class="form-control" required autofocus>
                                         </div>
-
-                                        <input type="hidden" name="studyGroupId" <?php echo "value=".$id ?> >
 
                                         <br>
                                         <br>
@@ -339,4 +242,3 @@ if(isset($_POST['studyGroupId'])){
 
 </body>
 </html>
-

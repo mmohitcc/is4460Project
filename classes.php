@@ -16,6 +16,7 @@ class SSUser
         $this->Email = $Email;
         $this->Token = $Token;
         $this->School = $School;
+        $this->Major = $Major;
         $this->Major = $Zip;
         $this->Address = $Address;
         $this->UserType = $UserType;

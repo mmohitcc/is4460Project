@@ -29,6 +29,9 @@
                     echo $_SESSION['FullName'];
                     echo '<li class="nav-item">
                 <a class="nav-link" href="logout.php">logout</a>
+                </li>
+                                <li class="nav-item">
+                <a class="nav-link" href="editUser.php">edit profile</a>
                 </li>';
                 }
                 else
@@ -44,7 +47,7 @@
             session_start();
             if (isset($_SESSION['FullName'])) {
                 echo '<li class="nav-item">
-                <a class="nav-link" href="dashboard.php">Dashboard</a>
+                <a class="nav-link" href="dashboard.php">Home</a>
                 </li>';
             }
             else
@@ -58,17 +61,17 @@
 
 
             <li class="nav-item">
-                <a class="nav-link" href="home.php">Study Groups</a>
+                <a class="nav-link" href="studyGroups.php">Study Groups</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="tutors.php">Tutors</a>
             </li>
 
         </ul>
-<!--        <form class="form-inline my-2 my-lg-0" action="studyGroups.php">-->
-<!--            <input class="form-control mr-sm-2" type="number" placeholder="zip">-->
-<!--            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
-<!--        </form>-->
+        <form class="form-inline my-2 my-lg-0" method="post" action="studyGroups.php">
+            <input class="form-control mr-sm-2" name="searchZip" type="number" placeholder="zip">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
     </div>
 </nav>
 
@@ -84,7 +87,7 @@
             <form role="form" method="post" action="studyGroups.php" id="form-buscar">
                 <div class="form-group">
                     <div class="input-group">
-                        <input id="1" class="form-control" type="number" name="searchZip" placeholder="Zipcode..." required/>
+                        <input id="1" class="form-control" type="number" name="searchZip" placeholder="Zipcode..." />
                         <span class="input-group-btn">
 <button class="btn btn-success" type="submit">
 <i class="glyphicon glyphicon-search" aria-hidden="true"></i> Search

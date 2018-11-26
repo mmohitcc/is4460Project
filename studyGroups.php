@@ -8,6 +8,21 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="tutors.css">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script>
+
+        function password(id){
+            var password = $("#password" + id)[0].value;
+            var passwordTyped = $("#changedPassword" + id)[0].value;
+
+            if(password == passwordTyped) {
+                $("#" + id).show();
+                $("#changedPassword" + id).hide();
+            }
+
+        }
+
+    </script>
+
 </head>
 <body>
 <!-- Image and text -->
@@ -23,16 +38,16 @@
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item">
-                <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
-            </li>
+
             <?php
             session_start();
-
             if (isset($_SESSION['FullName'])) {
                 echo $_SESSION['FullName'];
                 echo '<li class="nav-item">
                 <a class="nav-link" href="logout.php">logout</a>
+                </li>
+                                <li class="nav-item">
+                <a class="nav-link" href="editUser.php">edit profile</a>
                 </li>';
             }
             else
@@ -42,19 +57,35 @@
                 </li>';
 
             }
-
-
-
             ?>
-            <li class="nav-item active">
+
+            <?php
+            session_start();
+            if (isset($_SESSION['FullName'])) {
+                echo '<li class="nav-item">
+                <a class="nav-link" href="dashboard.php">Home</a>
+                </li>';
+            }
+            else
+            {
+                echo '<li class="nav-item">
+                <a class="nav-link" href="home.php">Home</a>
+                </li>';
+
+            }
+            ?>
+
+
+            <li class="nav-item">
                 <a class="nav-link" href="studyGroups.php">Study Groups</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="tutors.php">Tutors</a>
             </li>
+
         </ul>
-        <form class="form-inline my-2 my-lg-0" action="studyGroups.php">
-            <input class="form-control mr-sm-2" type="number" placeholder="zip">
+        <form class="form-inline my-2 my-lg-0" method="post" action="studyGroups.php">
+            <input class="form-control mr-sm-2" name="searchZip" type="number" placeholder="zip">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
     </div>
@@ -81,10 +112,23 @@
         require_once 'setLogin.php';
         $conn = new mysqli($hn, $un, $pw, $db);
         if($conn->connect_error) die($conn->connect_error);
-
+        $zip =$_POST['searchZip'];
         if(isset($_POST['searchZip'])){
-            $zip =$_POST['searchZip'];
+
+            if($zip == "") {
+
+                $query = "SELECT * from studySession;";
+
+            } else {
+
+                $query = "SELECT * from studySession where zip = '$zip'";
+            }
+
+
+        } else {
             $query = "SELECT * from studySession;";
+        }
+
 
             $result = $conn->query($query);
             if(!$result) die($conn->error);
@@ -95,27 +139,82 @@
         echo '<br>';
         echo '<br>';
 
+        echo "<script>
+        function test(id){
+            alert(id)}</script>";
         while ($row = mysqli_fetch_object($result)) {
+            if($row->password == "") {
+                $public = 'Yes';
+            } else {
+                $public = "No";
+            }
 
-             echo "    
+            if($row->password != NULL) {
+                // means a password is set on the study session
+                echo "    
+                 <div class=\"studyCard\">
+                    <h3>$row->class </h3>
+                    <hr>
+                    <h5>Coordinator: $row->owner</h5>
+                    <div style='display: none' id='$row->id'>
+                    <p class=\"title\">Subject: $row->subject</p>
+                    <p>School: $row->university</p>
+                    <p>Date: $row->timeStart</p>
+                    <p>Open to public: $public</p>
+                    <form method='post' action='messagesShow.php'><input type='hidden' name='studyGroupId' value=$row->id> <button class='btn btn-success'>Messages</button> </form>
+                    <a href=\"http://maps.google.com/?q='$row->Location'\"><i class=\"fa fa-map-pin\"></i> Map</a>
+                    <br>
+
+                    <form method=\"post\" action=\"download-ics.php\">
+            <input type=\"hidden\" name=\"date_start\" value='$row->date 9:00AM'>
+            <input type=\"hidden\" name=\"date_end\" value='$row->date 10:00AM'>
+            <input type=\"hidden\" name=\"location\" value='$row->Location'>
+            <input type=\"hidden\" name=\"description\" value=\"Study Session for '$row->class'\">
+            <input type=\"hidden\" name=\"summary\" value=\"Study hard!\">
+            <input type=\"hidden\" name=\"url\" value=\"studysession.co\">
+                        <i class=\"fa fa-calendar\"></i>
+            <input style='background: transparent; border: none;' type=\"submit\" value=\"Add to Calendar\">
+        </form>
+                    
+                    <a href=\"edit.php\"><p style=\"color: gray; font-size: 14px;\">edit group</p></a>
+                    <p><form method='post' action='joinGroup.php'> 
+                    <input name='joinGroupId' type='hidden' value=$row->id> 
+                    <button class=\"button\">Join Group</button></form></p>
+                    <input style='display: none' type='text' id='password$row->id' value='$row->password'>
+                    </div>
+                    <input id='changedPassword$row->id' onchange='password($row->id)' type='text' class='form-control' placeholder='Password'>
+                </div>";
+            } else {
+
+                echo "    
      <div class=\"studyCard\">
         <h3>$row->class </h3>
         <hr>
-        <h5>Coordinator: $row->user</h5>
+        <h5>Coordinator: $row->owner</h5>
         <p class=\"title\">Subject: $row->subject</p>
         <p>School: $row->university</p>
         <p>Date: $row->timeStart</p>
-        <p>Open to public: $row->isPublic</p>
-        <form method='post' action='messagesShow.php'><input type='hidden' name='studyGroupId' value=$row->id> <button>Messages</button> </form>
-        <a href=\"#\"><i class=\"fa fa-map-pin\"></i> google maps</a>
+        <p>Open to public: $public</p>
+        <form method='post' action='messagesShow.php'><input type='hidden' name='studyGroupId' value=$row->id> <button class='btn btn-success'>Messages</button> </form>
+        <a href=\"http://maps.google.com/?q='$row->Location'\"><i class=\"fa fa-map-pin\"></i> Map</a>
         <br>
-        <a href=\"#\"><i class=\"fa fa-google\"></i> Add to Calendar</a>
+                    <form method=\"post\" action=\"download-ics.php\">
+            <input type=\"hidden\" name=\"date_start\" value='$row->date 9:00AM'>
+            <input type=\"hidden\" name=\"date_end\" value='$row->date 10:00AM'>
+            <input type=\"hidden\" name=\"location\" value='$row->Location'>
+            <input type=\"hidden\" name=\"description\" value=\"Study Session for '$row->class'\">
+            <input type=\"hidden\" name=\"summary\" value=\"Study hard!\">
+            <input type=\"hidden\" name=\"url\" value=\"studysession.co\">
+                        <i class=\"fa fa-calendar\"></i>
+            <input style='background: transparent; border: none;' type=\"submit\" value=\"Add to Calendar\">
+        </form>
+        
         <a href=\"edit.php\"><p style=\"color: gray; font-size: 14px;\">edit group</p></a>
         <p><form method='post' action='joinGroup.php'> 
         <input name='joinGroupId' type='hidden' value=$row->id> 
         <button class=\"button\">Join Group</button></form></p>
     </div>";
-
+            }
         }
 
    // $result= $conn->query($query);
@@ -123,7 +222,7 @@
 
       $result= $conn->query($query);
 
-        }
+
         ?>
 
     </div>

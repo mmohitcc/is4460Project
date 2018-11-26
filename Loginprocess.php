@@ -4,6 +4,7 @@
 if (isset($_POST['Email'])) {
     require_once 'classes.php';
     require_once 'setLogin.php';
+    session_start();
     $Email = sanitizeMySQL($conn, $_POST['Email']);
     $pwd = sanitizeMySQL($conn, $_POST['pwd']);
      
@@ -25,12 +26,12 @@ if (isset($_POST['Email'])) {
     $db_Address = $tmp['Address'];
     $db_UserType = $tmp['UserType'];
     $db_PayRate = $tmp['PayRate'];
-    
+    $db_imgUrl = $tmp['imgUrl'];
+
     if ($input_token == $db_Token) {
-    
-        session_start();
-        $_SESSION['userID'] = $db_userId;
+
         $_SESSION['FullName'] = $db_FullName;
+        $_SESSION['userID'] = $tmp['id'];
         $_SESSION['Phone'] = $db_Phone;
         $_SESSION['Email'] = $db_Email;
         $_SESSION['Token'] = $db_Token;
@@ -40,6 +41,7 @@ if (isset($_POST['Email'])) {
         $_SESSION['Address'] = $db_Address;
         $_SESSION['UserType'] = $db_UserType;
         $_SESSION['PayRate'] = $db_PayRate;
+        $_SESSION['imgUrl'] = $db_imgUrl;
         $_SESSION['test'] = "test";
 
         header("Location: dashboard.php?message=Successful");
